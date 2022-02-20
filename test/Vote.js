@@ -53,6 +53,13 @@ describe("Voting Contract", function () {
     await expect(poll.connect(addr1).voteYes()).to.be.revertedWith(
         'You already voted'
     )
+    await poll.connect(owner).voteNo();
+    await expect(poll.connect(owner).voteNo()).to.be.revertedWith(
+        'You already voted'
+    )
+    await expect(poll.connect(owner).voteYes()).to.be.revertedWith(
+        'You already voted'
+    )
   });
 
   it("Does not allow someone without tokens to vote", async function () {
@@ -71,4 +78,10 @@ describe("Voting Contract", function () {
     const yesPerc = await poll.getYesPercentage();
     expect(yesPerc).to.equal(66);
   })
+
+  it("should allow me to check if I voted", async function () {
+    expect(poll.connect(addr1).haveIVoted()).to.be(false);
+    await poll.connect(addr1).voteYes();
+    expect(poll.connect(addr1).haveIVoted()).to.be(true);
+  });
 });

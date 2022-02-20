@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract Poll {
   IERC20 private _token;
   address public owner;
-  address[] yesVoters;
-  address[] voters;
+  uint yesVoters;
+  uint totalVoters;
+  mapping(address => bool) voted;
 
   constructor(IERC20 token) {
     owner = msg.sender;
@@ -18,34 +19,34 @@ contract Poll {
     return _token.balanceOf(voter) >= 100 * 10**18;
   }
 
-  function hasVoted(address voter) view public returns (bool) {
-    bool contains = false;
-    for (uint i = 0; i < voters.length; i++) {
-      if (voter == voters[i]) {
-        contains = true;
-      }
-    }
-    return contains;
+  function hasVoted(address voter) view private returns (bool) {
+    return voted[voter];
+  }
+
+  function haveIVoted() view external returns (bool) {
+    return voted[msg.sender];
   }
 
   function voteYes() public {
     require(!hasVoted(msg.sender), "You already voted");
     require(hasTokens(msg.sender), "Need 100 FWEB3 tokens to vote");
-    yesVoters.push(msg.sender);
-    voters.push(msg.sender);
+    yesVoters++;
+    totalVoters++;
+    voted[msg.sender] = true;
   }
 
   function voteNo() public {
     require(!hasVoted(msg.sender), "You already voted");
     require(hasTokens(msg.sender), "Need 100 FWEB3 tokens to vote");
-    voters.push(msg.sender);
+    totalVoters++;
+    voted[msg.sender] = true;
   }
 
   function getNumVoters() public view returns (uint) {
-    return voters.length;
+    return totalVoters;
   }
 
   function getYesPercentage() public view returns (uint) {
-    return yesVoters.length * 100 / getNumVoters();
+    return yesVoters * 100 / getNumVoters();
   }
 }

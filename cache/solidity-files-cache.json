@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "E:\\Solidity Projects\\fweb3_vote\\contracts\\vote.sol": {
-      "lastModificationDate": 1645321347782,
-      "contentHash": "2db8d126017f886c93dcd39cedc2fc2e",
+      "lastModificationDate": 1645323217953,
+      "contentHash": "9a3d121870596d92e5349545cc9e5f9a",
       "sourceName": "contracts/vote.sol",
       "solcConfig": {
         "version": "0.8.2",
